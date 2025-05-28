@@ -11,10 +11,6 @@
         $password = password_hash( $_POST['password'], PASSWORD_BCRYPT);
     }
 
-
-    $thequery = "Select * from user where Username = \"$username\" or Email = \"$email\"";
-    // $user = $mysqlClient->prepare(query: 'Select * from user where Username = :username or Email = :email');
-
     $querry = $mysqlClient->prepare("Select * from user where Username = \"$username\" or Email = \"$email\"");
     $querry->execute();
 
