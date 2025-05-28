@@ -16,9 +16,18 @@ $querry->execute();
 
 $similarUser = $querry->fetchAll();
 
+$imageName = '';
+
+if (!empty($_FILES['profilePicture']['name'])) {
+    $extension = pathinfo($_FILES['profilePicture']['name'], PATHINFO_EXTENSION);
+    $imageName = uniqid() . '.' . $extension;
+    move_uploaded_file($_FILES['profilePicture']['tmp_name'], 'uploads/users/' . $imageName);
+}
+
+
 if ($similarUser == null) {
     echo ("account can be created");
-    $querry = $mysqlClient->prepare("insert into user (Username, Password, Email, Wallet, ProfilePicture, role) values (\"$username\", \"$password\", \"$email\", 0, \"$username.png\", \"user\")");
+    $querry = $mysqlClient->prepare("insert into user (Username, Password, Email, Wallet, ProfilePicture, role) values (\"$username\", \"$password\", \"$email\", 0, \"$imageName\", \"user\")");
     $querry->execute();
     header("Location: index.php");
 } else {
