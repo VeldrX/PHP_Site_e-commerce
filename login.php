@@ -10,10 +10,10 @@
 
     <form action="/loginHandler.php" method="post" enctype="multipart/form-data">
         <label for="username">Username</label>
-        <input type="text" name="username" id="username" placeholder="Username">
+        <input type="text" name="username" id="username" placeholder="Username" required>
 
         <label for="password">password</label>
-        <input type="password" name="password" id="password">
+        <input type="password" name="password" id="password" required>
 
         <input type="submit" value="submit">
     </form>
