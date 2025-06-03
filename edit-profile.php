@@ -71,12 +71,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['email'] = $email; // Update session email
     }
 
-    if (!empty($wallet) && $wallet > $user['Wallet']) {
-        $stmt = $pdo->prepare("UPDATE user SET Wallet = :wallet WHERE Id = :id");
-        $stmt->bindValue(':wallet', $wallet, PDO::PARAM_STR);
-        $stmt->bindValue(':id', $user['Id'], PDO::PARAM_INT);
-        $stmt->execute();
-        $_SESSION['wallet'] = $wallet; // Update session wallet
+    if (!empty($wallet)) {
+        if (!is_numeric($wallet)) {
+            $message = 'Le portefeuille doit être un nombre.';
+            $_SESSION['error'] = $message;
+        } elseif ($wallet <= $user['Wallet']) {
+            $message = 'La somme doit être supérieure à votre solde actuel.';
+            $_SESSION['error'] = $message;
+        } else {
+            $stmt = $pdo->prepare("UPDATE user SET Wallet = :wallet WHERE Id = :id");
+            $stmt->bindValue(':wallet', $wallet, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $user['Id'], PDO::PARAM_INT);
+            $stmt->execute();
+            $_SESSION['wallet'] = $wallet;
+        }
     }
 
     if (!empty($oldPassword) && !empty($newPassword)) {
@@ -89,8 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['password'] = $newPassword; // Update session password
         }
     }
-
-    $stmt->execute();
 
     header('Location: profile.php');
     exit;
