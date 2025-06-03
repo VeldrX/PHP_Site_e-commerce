@@ -12,13 +12,25 @@ if (isset($_GET['added']) && $_GET['added'] == 1) {
           </div>';
 }
 
-
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=php_exam_db;charset=utf8', 'root', '');
 } catch (PDOException $e) {
     die('Erreur de connexion à la base de données : ' . $e->getMessage());
 }
 
+if (isset($_SESSION['username'])) {
+    
+    $usename = $_SESSION['username'];
+
+    $querry = $pdo->prepare("Select * from user where Username = \"$usename\"");
+
+    $querry->execute();
+    
+    $user = $querry->fetchAll();
+    
+    $user = $user[0];
+
+}
 $id = (int) $_GET['id'];
 
 // Récupération des infos de l'article
@@ -114,6 +126,17 @@ $quantity = $stock ? $stock['NbrInStock'] : 'Inconnu';
 
         <a class="back-link" href="index.php">← Retour à l'accueil</a>
     </div>
+            <?php 
+            if ($_SESSION['user_id'] == $article['UserId'] or $user[6] == "admin") {
+                $placeholder = $article['Id'];
+                echo ("
+                    <form method=\"post\" action=\"/editPost.php\">
+                    <button name=\"idOfThingSold\" value=\"$placeholder\"> Modifier</button>
+                    </form>
+                ");
+            }
+            ?>
+            
 
 </body>
 

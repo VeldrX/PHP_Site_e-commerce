@@ -13,15 +13,11 @@ $querry = $mysqlClient->prepare("Select * from user where Username = \"$username
 $querry->execute();
 
 $similarUser = $querry->fetchAll();
-
-$imageName = '';
-
-if (!empty($_FILES['profilePicture']['name'])) {
-    $extension = pathinfo($_FILES['profilePicture']['name'], PATHINFO_EXTENSION);
-    $imageName = uniqid() . '.' . $extension;
-    move_uploaded_file($_FILES['profilePicture']['tmp_name'], 'uploads/users/' . $imageName);
+ 
+if ($_POST["delete"] = "delete"){
+    $querry = $mysqlClient->prepare("DELETE * From User WHERE username = \"$username\" ");
+    $querry->execute();
 }
-
 
 if ($similarUser == null) {
     echo"wut";
