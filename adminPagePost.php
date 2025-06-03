@@ -76,13 +76,15 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
         <h1 style="padding: 20px;">Articles en vente</h1>
         <div class="articles">
             <?php foreach ($articles as $article): ?>
-                <div class="article-card">
-                    <img src="uploads/articles/<?= htmlspecialchars($article['Image']) ?>" alt="Image de l'article">
-                    <h3><?= htmlspecialchars($article['Name']) ?></h3>
-                    <p><strong>Prix :</strong> <?= htmlspecialchars($article['Price']) ?> €</p>
-                    <p><strong>Publié par :</strong> <?= htmlspecialchars($article['Username']) ?></p>
-                    <p><?= htmlspecialchars($article['Description']) ?></p>
-                </div>
+                <a href="detail.php?id=<?= $article['Id'] ?>" style="text-decoration: none; color: inherit;">
+                    <div class="article-card">
+                        <img src="uploads/articles/<?= htmlspecialchars($article['Image']) ?>" alt="Image de l'article">
+                        <h3><?= htmlspecialchars($article['Name']) ?></h3>
+                        <p><strong>Prix :</strong> <?= htmlspecialchars($article['Price']) ?> €</p>
+                        <p><strong>Publié par :</strong> <?= htmlspecialchars($article['Username']) ?></p>
+                        <p><?= htmlspecialchars($article['Description']) ?></p>
+                    </div>
+                </a>
             <?php endforeach; ?>
         </div>
     </main>
