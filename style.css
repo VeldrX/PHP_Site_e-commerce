@@ -8,6 +8,20 @@ body {
 }
 
 /* HEADER */
+.admin-button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background 0.3s ease;
+}
+
+.admin-button:hover {
+    background-color: #c0392b;
+}
 
 .site-header {
     background-color: #2c3e50;
@@ -75,4 +89,7 @@ body {
         align-items: flex-start;
         gap: 0.5rem;
     }
+
+
+
 }

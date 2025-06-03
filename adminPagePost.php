@@ -2,52 +2,38 @@
 session_start();
 
 try {
-    $mysqlClient = new PDO(dsn: 'mysql:host=localhost;dbname=php_exam_db;charset=utf8', username: 'root', password: '');
+    $mysqlClient = new PDO('mysql:host=localhost;dbname=php_exam_db;charset=utf8', 'root', '');
 } catch (PDOException $e) {
     die($e->getMessage());
 }
 
 if (isset($_SESSION['username'])) {
-
     $usename = $_SESSION['username'];
+    $query = $mysqlClient->prepare("SELECT * FROM user WHERE Username = :username");
+    $query->execute(['username' => $usename]);
+    $user = $query->fetch(PDO::FETCH_ASSOC);
 
-    $querry = $mysqlClient->prepare("Select * from user where Username = \"$usename\"");
-
-    $querry->execute();
-
-    $user = $querry->fetchAll();
-
-    $user = $user[0];
-
-    if ($user[6] != "admin") {
-        echo "not authorised";
+    if (!$user || $user['role'] !== 'admin') {
+        echo "Not authorised";
         exit;
     }
 } else {
     echo "User not logged in.";
-
     exit;
 }
 
 $currentPage = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
-
-// Nombre d'articles par page
 $parPage = 10;
 
-// Récupérer le nombre total d'articles
-$sql = 'SELECT COUNT(*) AS nb_articles FROM `article`;';
+$sql = 'SELECT COUNT(*) AS nb_articles FROM article';
 $query = $mysqlClient->prepare($sql);
 $query->execute();
 $result = $query->fetch();
 $nbArticles = (int) $result['nb_articles'];
 
-// Calcul du nombre total de pages
 $pages = ceil($nbArticles / $parPage);
-
-// Calcul de la première entrée à récupérer
 $premier = ($currentPage - 1) * $parPage;
 
-// Récupérer les articles avec pagination + jointure utilisateur
 $sql = "
     SELECT article.*, user.Username 
     FROM article 
@@ -60,19 +46,119 @@ $query->bindValue(':premier', $premier, PDO::PARAM_INT);
 $query->bindValue(':parpage', $parPage, PDO::PARAM_INT);
 $query->execute();
 $articles = $query->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
+    <meta charset="UTF-8">
+    <title>Admin - Articles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            padding: 30px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-buttons a button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .admin-buttons a button:hover {
+            background-color: #c0392b;
+        }
+
+        .articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .article-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .article-card:hover {
+            transform: scale(1.02);
+        }
+
+        .article-card img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .article-card h3 {
+            margin: 0 0 10px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #3498db;
+            background-color: #eaeaea;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .pagination a.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <?php include 'header.php'; ?>
     <main>
 
-        <a href="adminPageUser.php">
-            <button>User</button>
-        </a>
-        <h1 style="padding: 20px;">Articles en vente</h1>
+
+        <h1>Articles en vente</h1>
+
         <div class="articles">
             <?php foreach ($articles as $article): ?>
                 <a href="detail.php?id=<?= $article['Id'] ?>" style="text-decoration: none; color: inherit;">
@@ -86,23 +172,15 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
                 </a>
             <?php endforeach; ?>
         </div>
+
+        <div class="pagination">
+            <?php for ($i = 1; $i <= $pages; $i++): ?>
+                <a href="?page=<?= $i ?>" class="<?= $i == $currentPage ? 'active' : '' ?>">
+                    <?= $i ?>
+                </a>
+            <?php endfor; ?>
+        </div>
     </main>
-    <div style="text-align: center; margin: 20px;">
-        <?php for ($i = 1; $i <= $pages; $i++): ?>
-            <a href="?page=<?= $i ?>"
-                style="
-                        margin: 0 5px;
-                        padding: 8px 12px;
-                        text-decoration: none;
-                        color: <?= $i == $currentPage ? 'white' : '#3498db' ?>;
-                        background-color: <?= $i == $currentPage ? '#3498db' : '#eaeaea' ?>;
-                        border-radius: 5px;
-                        font-weight: bold;
-                    ">
-                <?= $i ?>
-            </a>
-        <?php endfor; ?>
-    </div>
-    </body>
+</body>
 
 </html>

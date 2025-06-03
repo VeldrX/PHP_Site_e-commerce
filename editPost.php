@@ -1,63 +1,141 @@
-<?php 
-    session_start();
+<?php
+session_start();
 
 try {
-    $mysqlClient = new PDO(dsn: 'mysql:host=localhost;dbname=php_exam_db;charset=utf8', username: 'root', password: '');
+    $mysqlClient = new PDO('mysql:host=localhost;dbname=php_exam_db;charset=utf8', 'root', '');
 } catch (PDOException $e) {
     die($e->getMessage());
 }
 
-if (isset($_SESSION['username'])) {
-    
-    $usename = $_SESSION['username'];
-
-    $querry = $mysqlClient->prepare("Select * from user where Username = \"$usename\"");
-
-    $querry->execute();
-    
-    $user = $querry->fetchAll();
-    
-    $user = $user[0];
-    
-
-} else {
+if (!isset($_SESSION['username'])) {
     echo "User not logged in.";
     exit;
 }
+
+$username = $_SESSION['username'];
+$query = $mysqlClient->prepare("SELECT * FROM user WHERE Username = :username");
+$query->bindParam(':username', $username, PDO::PARAM_STR);
+$query->execute();
+$user = $query->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    echo "Utilisateur introuvable.";
+    exit;
+}
+
+if (!isset($_POST["idOfThingSold"])) {
+    echo "ID du produit manquant.";
+    exit;
+}
+
 $idOfThingSold = $_POST["idOfThingSold"];
+$query = $mysqlClient->prepare("SELECT * FROM article WHERE Id = :id");
+$query->bindParam(':id', $idOfThingSold, PDO::PARAM_INT);
+$query->execute();
+$postToEdit = $query->fetch(PDO::FETCH_ASSOC);
 
-$querry = $mysqlClient->prepare("Select * from article where Id = \"$idOfThingSold\"");
-
-$querry->execute();
-    
-$postToEdit = $querry->fetchAll();
-    
-$postToEdit = $postToEdit[0];
-
+if (!$postToEdit) {
+    echo "Article introuvable.";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <title>edit</title>
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier l'article</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f4f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"],
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        button.delete-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        button.delete-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <?php include 'header.php'; ?>
+    <main>
         <form action="/editPostHandler.php" method="post" enctype="multipart/form-data">
-        <h2>Register</h2>
+            <h2>Modifier l'article</h2>
 
-        <input type="hidden" name="id" value="<?= htmlspecialchars($postToEdit['Id']) ?>">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($postToEdit['Id']) ?>">
 
-        <label for="productName">nom du produit</label>
-        <input type="text" name="productName" value="<?= htmlspecialchars($postToEdit['Name']) ?>">
+            <label for="productName">Nom du produit</label>
+            <input type="text" name="productName" id="productName" value="<?= htmlspecialchars($postToEdit['Name']) ?>" required>
 
-        <label for="description">description</label>
-        <input type="text" name="description" value="<?= htmlspecialchars($postToEdit['Description']) ?>">
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description" value="<?= htmlspecialchars($postToEdit['Description']) ?>" required>
 
-        <label for="price">prix</label>
-        <input type="number" name="price" value="<?= htmlspecialchars($postToEdit['Price']) ?>">
+            <label for="price">Prix (€)</label>
+            <input type="number" name="price" id="price" step="0.01" value="<?= htmlspecialchars($postToEdit['Price']) ?>" required>
 
-        <button type="submit" name="delete" value="delete">Delete</button>
-        <input type="submit" value="Register">
-    </form>
-    </body>
+            <input type="submit" value="Enregistrer les modifications">
+            <button type="submit" name="delete" value="delete" class="delete-button">Supprimer l'article</button>
+        </form>
+    </main>
+</body>
+
 </html>

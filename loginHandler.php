@@ -25,6 +25,8 @@ if ($similarUser == null) {
         echo ("connect");
         $_SESSION['username'] = $similarUser[0]['Username'];
         $_SESSION['user_id'] = $similarUser[0]['Id'];
+        $_SESSION['role'] = $similarUser[0]['role']; // si ta table 'user' a une colonne 'Role'
+
 
         header("Location: index.php");
         exit();
