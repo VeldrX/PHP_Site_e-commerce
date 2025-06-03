@@ -32,4 +32,5 @@ if ($similarUser == null) {
     $querry->execute();
 }
 
+header("Location: /adminPageUser.php");
 ?>
