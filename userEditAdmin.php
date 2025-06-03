@@ -48,6 +48,36 @@ $userToEdit = $userToEdit[0];
         <title>edit</title>
     </head>
     <body>
+        <form action="/userEditAdminHandler.php" method="post" enctype="multipart/form-data">
+        <h2>Register</h2>
+
+        <input type="hidden" name="username" value="<?= htmlspecialchars($userToEdit['Username']) ?>">
+
         
+        <label for="wallet">Argent (ne peut étre qu'augementer)</label>
+        <input type="number" name="wallet" id="wallet" min=<?= htmlspecialchars($userToEdit['Wallet']) ?>  placeholder=<?= htmlspecialchars($userToEdit['Wallet']) ?>>
+
+        <p>Role</p>
+        <?php 
+            if($userToEdit['role'] == "admin"){
+                echo "<label for=\"user\">user</label>
+                    <input type=\"radio\" id=\"user\" name=\"role\" value=\"user\"  > <br>
+
+                    <label for=\"user\">admin</label>
+                    <input type=\"radio\" id=\"admin\" name=\"role\" value=\"admin\" checked><br> ";
+                } else {
+                    echo 
+                    "<label for=\"user\">user</label>
+                    <input type=\"radio\" id=\"user\" name=\"role\" value=\"user\" checked > <br>
+
+                    <label for=\"user\">admin</label>
+                    <input type=\"radio\" id=\"admin\" name=\"role\" value=\"admin\" ><br> ";
+                };
+        ?>
+
+
+        <button type="submit" name="delete" value="delete">Delete</button>
+        <input type="submit" value="Register">
+    </form>
     </body>
 </html>
