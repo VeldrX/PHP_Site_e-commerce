@@ -5,6 +5,14 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die('Article invalide.');
 }
 
+
+if (isset($_GET['added']) && $_GET['added'] == 1) {
+    echo '<div style="padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 15px;">
+            ✅ L\'article a bien été ajouté au panier.
+          </div>';
+}
+
+
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=php_exam_db;charset=utf8', 'root', '');
 } catch (PDOException $e) {
@@ -96,9 +104,17 @@ $quantity = $stock ? $stock['NbrInStock'] : 'Inconnu';
         <p><strong>Publié par :</strong> <?= htmlspecialchars($article['Username']) ?></p>
         <p><strong>Description :</strong></p>
         <p><?= nl2br(htmlspecialchars($article['Description'])) ?></p>
+        <?php if (isset($_SESSION['username'])): ?>
+            <a href="add_to_cart.php?id=<?= $article['Id'] ?>">Ajouter au panier</a>
+
+        <?php else: ?>
+            <p><a href="login.php">Connectez-vous</a> pour ajouter au panier.</p>
+        <?php endif; ?>
+
 
         <a class="back-link" href="index.php">← Retour à l'accueil</a>
     </div>
+
 </body>
 
 </html>

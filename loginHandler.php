@@ -24,7 +24,8 @@ if ($similarUser == null) {
     if (password_verify($password, $similarUser[0][2])) {
         echo ("connect");
         $_SESSION['username'] = $similarUser[0]['Username'];
-        // Redirection vers une page protégée
+        $_SESSION['user_id'] = $similarUser[0]['Id'];
+
         header("Location: index.php");
         exit();
     } else {
