@@ -156,8 +156,11 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
     <?php include 'header.php'; ?>
     <main>
 
-
         <h1>Articles en vente</h1>
+
+        <a href="adminPageUser.php">
+            <button>utilisateur</button>
+        </a>    
 
         <div class="articles">
             <?php foreach ($articles as $article): ?>
