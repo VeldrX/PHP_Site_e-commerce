@@ -14,8 +14,8 @@ $querry->execute();
 
 $similarUser = $querry->fetchAll();
  
-if ($_POST["delete"] = "delete"){
-    $querry = $mysqlClient->prepare("DELETE * From User WHERE username = \"$username\" ");
+if ($_POST["delete"] === "delete"){
+    $querry = $mysqlClient->prepare("DELETE From User WHERE username = \"$username\" ");
     $querry->execute();
 }
 

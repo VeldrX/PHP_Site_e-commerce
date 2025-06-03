@@ -16,6 +16,12 @@ $article = $querry->fetchAll();
 
 $imageName = '';
 
+
+if ($_POST["delete"] === "delete"){
+    $querry = $mysqlClient->prepare("DELETE From article WHERE Id = \"$articleId\" ");
+    $querry->execute();
+}
+
 if ($article == null) {
     echo"wut";
 } else {
