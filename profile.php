@@ -7,7 +7,7 @@ try {
     die('Erreur de connexion à la base de données : ' . $e->getMessage());
 }
 
-if(isset($_SESSION['username'])) {
+if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
 
     $query = $pdo->prepare("SELECT * FROM user WHERE Username = :username");
@@ -26,7 +26,6 @@ if(isset($_SESSION['username'])) {
     $articles = $queryArticles->fetchAll(PDO::FETCH_ASSOC);
 
     $user = $query->fetch(PDO::FETCH_ASSOC);
-
 } else {
     echo "User not logged in.";
     exit;
@@ -66,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("DELETE FROM user WHERE Id = :id");
     $stmt->bindValue(':id', $user['Id'], PDO::PARAM_INT);
     $stmt->execute();
-    
+
     // Détruire la session et rediriger vers la page d'accueil
     session_destroy();
     header('Location: index.php');
@@ -77,42 +76,107 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8" />
     <title>Profile</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f5f7fa;
         }
 
         header {
             background-color: #3498db;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
             margin: 0;
+            font-size: 1.8rem;
         }
 
-        .container {
+        header .back-button {
+            background-color: white;
+            color: #3498db;
+            border: none;
+            padding: 8px 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container-page {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .user-info-page {
+            background-color: white;
             padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
 
-        .user-info {
-            margin-bottom: 20px;
+        .user-info-page img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
         }
 
-        .user-info p {
-            margin: 5px 0;
+        .user-info-page h2 {
+            margin-top: 0;
+        }
+
+        .user-info-page button,
+        .user-info-page .delete {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+
+        .user-info-page button {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .user-info-page .delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        h2.section-title {
+            font-size: 1.6rem;
+            margin: 30px 0 10px;
         }
 
         .articles {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 20px;
+        }
+
+        .article-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
         }
 
         .article-card img {
@@ -120,44 +184,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             height: 180px;
             object-fit: cover;
             border-radius: 5px;
+            margin-bottom: 10px;
         }
 
         .article-card h3 {
-            margin: 10px 0 5px;
+            margin: 5px 0;
+            font-size: 1.2rem;
         }
 
         .article-card p {
-            margin: 5px 0;
+            margin: 4px 0;
+            font-size: 0.95rem;
         }
 
-        .delete {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 15px;
+        .pagination {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 14px;
+            text-decoration: none;
+            font-weight: bold;
             border-radius: 5px;
-            cursor: pointer;
+            color: #3498db;
+            background-color: #eaeaea;
+        }
+
+        .pagination a.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        @media screen and (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-info {
+                text-align: center;
+            }
+
+            .user-info img {
+                margin: 0 auto 10px;
+            }
+
+            .user-info button,
+            .user-info .delete {
+                width: 100%;
+                margin: 10px 0;
+            }
         }
     </style>
+    <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
-    <header>
-        <h1>Profile</h1>
-        <a href="index.php"><button type="button" class="back-button" style="display:inline;">← Home</button></a>
-    </header>
-    <div class="container">
-        <div class="user-info">
-            <h2><?php echo htmlspecialchars($user['Username']); ?></h2>
-            <img src="<?php echo htmlspecialchars($user['ProfilePicture']); ?>" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;"></img>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($user['Email']); ?></p>
-            <p><strong>Wallet:</strong> <?php echo htmlspecialchars($user['Wallet']); ?>€</p>
-            <a href="edit-profile.php"><button type="button">Edit Profile</button></a>
-            <form method="post" onsubmit="return confirm('est-tu sur de vouloir supprimer ton compte ?\ncette action est irreversible')">
+    <?php include 'header.php'; ?>
+
+
+    <div class="container-page">
+        <div class="user-info-page">
+            <h2><?= htmlspecialchars($user['Username']) ?></h2>
+            <img src="<?= htmlspecialchars($user['ProfilePicture']) ?>" alt="Photo de profil">
+            <p><strong>Email :</strong> <?= htmlspecialchars($user['Email']) ?></p>
+            <p><strong>Solde :</strong> <?= htmlspecialchars($user['Wallet']) ?> €</p>
+
+            <a href="edit-profile.php"><button type="button">Modifier le profil</button></a>
+            <form method="post" onsubmit="return confirm('Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible.')">
                 <button type="submit" class="delete">Supprimer le compte</button>
             </form>
         </div>
-        <h2 style="padding: 20px;">Articles</h2>
-        <!-- articles de l'utilisateur -->
+
+        <h2 class="section-title">Mes articles</h2>
         <div class="articles">
             <?php foreach ($articles as $userArticle): ?>
                 <div class="article-card">
@@ -170,23 +272,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endforeach; ?>
         </div>
 
-        <!-- Pagination -->
         <?php if ($pages > 1): ?>
             <div class="pagination">
                 <?php for ($i = 1; $i <= $pages; $i++): ?>
-                    <a href="?page=<?php echo $i; ?>" style="
-                        margin: 0 5px;
-                        padding: 8px 12px;
-                        text-decoration: none;
-                        color: <?php echo $i == $currentPage ? 'white' : '#3498db'; ?>;
-                        background-color: <?php echo $i == $currentPage ? '#3498db' : '#eaeaea'; ?>;
-                        border-radius: 5px;
-                        font-weight: bold;">
-                        <?php echo $i; ?>
-                    </a>
+                    <a href="?page=<?= $i ?>" class="<?= $i == $currentPage ? 'active' : '' ?>"><?= $i ?></a>
                 <?php endfor; ?>
             </div>
         <?php endif; ?>
     </div>
 </body>
+
 </html>

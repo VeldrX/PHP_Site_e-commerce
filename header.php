@@ -8,6 +8,8 @@
 
             <a href="logout.php"><button type="button" class="disconnect-button">Disconnect</button></a>
             <a href="sell.php"><button type="button" class="disconnect-button">Sell Articles</button></a>
+            <a href="profile.php"><button type="button" class="disconnect-button">My Profile</button></a>
+
             <a href="cart.php"><button type="button" class="disconnect-button">🛒 Panier</button></a>
         <?php else: ?>
             <div class="container">
