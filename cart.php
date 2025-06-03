@@ -6,7 +6,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:host=localhost;dbname=php_exam_db;charset=utf8", "root", "");
+try {
+    $pdo = new PDO("mysql:host=localhost;dbname=php_exam_db;charset=utf8", "root", "");
+} catch (PDOException $e) {
+    die('Erreur de connexion : ' . $e->getMessage());
+}
 
 $userId = $_SESSION['user_id'];
 
@@ -37,29 +41,30 @@ $total = 0;
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f4f4;
-            padding: 2rem;
             margin: 0;
+            padding: 2rem;
         }
 
-        h1,
-        h2 {
+        h1 {
             text-align: center;
+            margin-bottom: 2rem;
         }
+
+
 
         .cart-item {
-            background-color: white;
+            display: flex;
+            background: white;
             border-radius: 12px;
             padding: 1rem;
             margin: 1rem auto;
-            display: flex;
+            max-width: 750px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             gap: 1rem;
-            align-items: center;
-            max-width: 700px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .cart-item img {
-            width: 100px;
+            width: 110px;
             height: auto;
             border-radius: 8px;
         }
@@ -69,14 +74,15 @@ $total = 0;
         }
 
         .cart-details h3 {
-            margin: 0 0 0.5rem 0;
+            margin: 0;
+            margin-bottom: 0.5rem;
         }
 
         .quantity-control {
+            margin: 0.8rem 0;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin: 0.5rem 0;
+            gap: 0.6rem;
         }
 
         .quantity-control form {
@@ -84,7 +90,7 @@ $total = 0;
         }
 
         .quantity-control button {
-            padding: 0.3rem 0.6rem;
+            padding: 0.4rem 0.8rem;
             font-size: 1.1rem;
             background-color: #3498db;
             border: none;
@@ -100,24 +106,46 @@ $total = 0;
 
         .subtotal {
             font-weight: bold;
+            margin-top: 0.5rem;
         }
 
         .total {
             text-align: center;
-            font-size: 1.4rem;
-            margin-top: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
+            margin-top: 2rem;
         }
 
         .empty-message {
             text-align: center;
             font-size: 1.2rem;
             margin-top: 2rem;
+            color: #888;
+        }
+
+        .validate-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 0.8rem 2rem;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .validate-btn:hover {
+            background-color: #219150;
         }
     </style>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+    <?php include 'header.php'; ?>
 
     <h1>Votre Panier</h1>
 
@@ -150,8 +178,9 @@ $total = 0;
         <?php endforeach; ?>
 
         <div class="total">Total : <?= number_format($total, 2) ?> €</div>
+
         <form action="cart/validate.php" method="get">
-            <button type="submit">Valider le panier</button>
+            <button type="submit" class="validate-btn">Valider le panier</button>
         </form>
     <?php endif; ?>
 

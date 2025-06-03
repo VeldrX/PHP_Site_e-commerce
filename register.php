@@ -1,17 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
+    <meta charset="UTF-8" />
     <title>Register</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
-            height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
         }
 
         form {
@@ -36,8 +44,7 @@
 
         input[type="text"],
         input[type="email"],
-        input[type="password"],
-        input[type="file"] {
+        input[type="password"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -61,27 +68,30 @@
             background-color: #2980b9;
         }
     </style>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <form action="/registerHandler.php" method="post" enctype="multipart/form-data">
-        <h2>Register</h2>
+    <?php include 'header.php'; ?>
 
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" placeholder="Username" required>
+    <main>
+        <form action="/registerHandler.php" method="post">
+            <h2>Register</h2>
 
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" placeholder="email@example.com" required>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Username" required>
 
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email" required>
 
-        <label for="profilePicture">Profile Picture</label>
-        <input type="file" name="profilePicture" id="profilePicture">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
 
-        <input type="submit" value="Register">
-    </form>
+            <input type="submit" value="Register">
+        </form>
+    </main>
 
 </body>
 

@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
+    <meta charset="UTF-8" />
     <title>Login</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
-            height: 100vh;
+            flex-direction: column;
+            /* header + contenu en colonne */
+        }
+
+        main {
+            flex: 1;
+            /* prend tout l’espace disponible */
+            display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
         }
 
         form {
@@ -59,21 +69,27 @@
             background-color: #2980b9;
         }
     </style>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <form action="/loginHandler.php" method="post">
-        <h2>Login</h2>
+    <?php include 'header.php'; ?>
 
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" placeholder="Username" required>
+    <main>
+        <form action="/loginHandler.php" method="post">
+            <h2>Login</h2>
 
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Username" required>
 
-        <input type="submit" value="Login">
-    </form>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+
+            <input type="submit" value="Login">
+        </form>
+    </main>
 
 </body>
 

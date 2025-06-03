@@ -99,10 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             font-family: Arial;
             padding: 2rem;
-            background-color: #f9f9f9;
+            background-color: rgb(229, 0, 0);
         }
 
-        .container {
+        .container_validate {
             max-width: 600px;
             margin: auto;
             background: white;
@@ -150,10 +150,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 1.5rem;
         }
     </style>
+    <link rel="stylesheet" href="../style.css">
+
 </head>
 
 <body>
-    <div class="container">
+    <?php include '../header.php'; ?>
+
+    <div class="container_validate">
         <h2>Confirmation de commande</h2>
 
         <?php if ($success): ?>

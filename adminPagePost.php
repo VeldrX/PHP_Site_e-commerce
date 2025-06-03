@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 
 try {
@@ -8,23 +8,21 @@ try {
 }
 
 if (isset($_SESSION['username'])) {
-    
+
     $usename = $_SESSION['username'];
 
     $querry = $mysqlClient->prepare("Select * from user where Username = \"$usename\"");
 
     $querry->execute();
-    
+
     $user = $querry->fetchAll();
-    
+
     $user = $user[0];
 
-    if ($user[6] != "admin"){
+    if ($user[6] != "admin") {
         echo "not authorised";
         exit;
     }
-    
-
 } else {
     echo "User not logged in.";
 
@@ -67,12 +65,13 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <main>
 
-    <a href="adminPageUser.php">
-        <button>User</button>
-    </a>    
+        <a href="adminPageUser.php">
+            <button>User</button>
+        </a>
         <h1 style="padding: 20px;">Articles en vente</h1>
         <div class="articles">
             <?php foreach ($articles as $article): ?>
@@ -86,10 +85,10 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </div>
     </main>
-        <div style="text-align: center; margin: 20px;">
-            <?php for ($i = 1; $i <= $pages; $i++): ?>
-                <a href="?page=<?= $i ?>"
-                    style="
+    <div style="text-align: center; margin: 20px;">
+        <?php for ($i = 1; $i <= $pages; $i++): ?>
+            <a href="?page=<?= $i ?>"
+                style="
                         margin: 0 5px;
                         padding: 8px 12px;
                         text-decoration: none;
@@ -98,9 +97,10 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
                         border-radius: 5px;
                         font-weight: bold;
                     ">
-                    <?= $i ?>
-                </a>
-            <?php endfor; ?>
-        </div>
+                <?= $i ?>
+            </a>
+        <?php endfor; ?>
+    </div>
     </body>
+
 </html>

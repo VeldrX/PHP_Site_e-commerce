@@ -55,38 +55,7 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
             padding: 0;
         }
 
-        header {
-            background-color: #3498db;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
 
-        .user-info {
-            font-weight: bold;
-            margin-right: 20px;
-        }
-
-        .auth-buttons a,
-        .disconnect-button {
-            color: white;
-            text-decoration: none;
-            background-color: #2980b9;
-            padding: 8px 15px;
-            border-radius: 5px;
-            margin-right: 10px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-
-        .auth-buttons a:hover,
-        .disconnect-button:hover {
-            background-color: #1f6391;
-        }
 
         .articles {
             padding: 20px;
@@ -118,28 +87,14 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
             margin: 5px 0;
         }
     </style>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <header>
-        <div>
-            <?php if (isset($_SESSION['username'])): ?>
-                <span class="user-info">Bienvenue, <?= htmlspecialchars($_SESSION['username']) ?></span>
-                <form action="logout.php" method="post" style="display:inline;">
-                    <button type="submit" class="disconnect-button">Disconnect</button>
-                </form>
-                <a href="sell.php"><button type="button" class="disconnect-button">Sell Articles</button></a>
-                <a href="cart.php"><button type="button" class="disconnect-button">🛒 Panier</button></a>
+    <?php include 'header.php'; ?>
 
-            <?php else: ?>
-                <div class="auth-buttons">
-                    <a href="login.php">Login</a>
-                    <a href="register.php">Register</a>
-                </div>
-            <?php endif; ?>
-        </div>
-    </header>
 
     <main>
         <h1 style="padding: 20px;">Articles en vente</h1>

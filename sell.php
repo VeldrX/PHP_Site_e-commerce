@@ -51,38 +51,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
+    <meta charset="UTF-8" />
     <title>Vendre un article</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #f9f9f9;
             margin: 0;
-            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .header {
-            background-color: #3498db;
-            color: white;
-            padding: 15px 30px;
+        main {
+            flex: 1;
             display: flex;
+            justify-content: center;
             align-items: center;
         }
 
-        .header a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            margin-top: 40px;
-        }
 
         form {
             background: white;
@@ -125,15 +115,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 15px;
         }
     </style>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <div class="header">
-        <a href="index.php">← Home</a>
-    </div>
+    <?php include 'header.php'; ?>
 
-    <div class="container">
+    <main>
         <form method="post" enctype="multipart/form-data">
             <h2>Vendre un article</h2>
 
@@ -158,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <input type="submit" value="Mettre en vente">
         </form>
-    </div>
+    </main>
 
 </body>
 
