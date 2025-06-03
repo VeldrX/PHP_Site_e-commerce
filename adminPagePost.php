@@ -158,10 +158,6 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
 
         <h1>Articles en vente</h1>
 
-        <a href="adminPageUser.php">
-            <button>utilisateur</button>
-        </a>    
-
         <div class="articles">
             <?php foreach ($articles as $article): ?>
                 <a href="detail.php?id=<?= $article['Id'] ?>" style="text-decoration: none; color: inherit;">
