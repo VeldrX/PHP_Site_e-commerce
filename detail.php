@@ -19,17 +19,16 @@ try {
 }
 
 if (isset($_SESSION['username'])) {
-    
+
     $usename = $_SESSION['username'];
 
     $querry = $pdo->prepare("Select * from user where Username = \"$usename\"");
 
     $querry->execute();
-    
-    $user = $querry->fetchAll();
-    
-    $user = $user[0];
 
+    $user = $querry->fetchAll();
+
+    $user = $user[0];
 }
 $id = (int) $_GET['id'];
 
@@ -93,6 +92,24 @@ $quantity = $stock ? $stock['NbrInStock'] : 'Inconnu';
 
         p {
             line-height: 1.6;
+        }
+
+        .edit-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-button:hover {
+            background-color: #d68910;
         }
 
         .back-link {
@@ -163,19 +180,21 @@ $quantity = $stock ? $stock['NbrInStock'] : 'Inconnu';
         <?php else: ?>
             <p class="login-prompt"><a href="login.php">Connectez-vous</a> pour ajouter cet article au panier.</p>
         <?php endif; ?>
-
+        <?php
+        if (isset($_SESSION['user_id']) && ($_SESSION['user_id'] == $article['UserId'] || $user['Role'] === "admin")) {
+            echo '
+        <form method="post" action="editPost.php" style="display:inline-block;">
+            <button type="submit" name="idOfThingSold" value="' . htmlspecialchars($article['Id']) . '" class="edit-button">
+                ✏️ Modifier
+            </button>
+        </form>
+    ';
+        }
+        ?>
     </div>
-            <?php 
-            if ($_SESSION['user_id'] == $article['UserId'] or $user[6] == "admin") {
-                $placeholder = $article['Id'];
-                echo ("
-                    <form method=\"post\" action=\"/editPost.php\">
-                    <button name=\"idOfThingSold\" value=\"$placeholder\"> Modifier</button>
-                    </form>
-                ");
-            }
-            ?>
-            
+
+
+
 
 </body>
 
