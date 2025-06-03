@@ -130,6 +130,8 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
                     <button type="submit" class="disconnect-button">Disconnect</button>
                 </form>
                 <a href="sell.php"><button type="button" class="disconnect-button">Sell Articles</button></a>
+                <a href="cart.php"><button type="button" class="disconnect-button">🛒 Panier</button></a>
+
             <?php else: ?>
                 <div class="auth-buttons">
                     <a href="login.php">Login</a>
