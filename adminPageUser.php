@@ -84,7 +84,7 @@ $listUser = $query->fetchAll(PDO::FETCH_ASSOC);
                         <p><strong>Role :</strong><?= htmlspecialchars($aUser['role']) ?></p>
                     </div>
                 </button>
-            <?php endforeach; ?>
+            <?php endforeach; ?> 
             </form>
         </div>
     </main>
