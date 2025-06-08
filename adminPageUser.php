@@ -162,7 +162,7 @@ $listUser = $query->fetchAll(PDO::FETCH_ASSOC);
 
         <h1>Utilisateurs inscrits</h1>
 
-        <form action="/userEditAdmin.php" method="post" class="articles">
+        <form action="/php_exam/userEditAdmin.php" method="post" class="articles">
             <?php foreach ($listUser as $aUser): ?>
                 <button name="usernameOfEdited" value="<?= htmlspecialchars($aUser['Username']) ?>">
                     <div class="article-card">

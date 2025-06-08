@@ -13,14 +13,14 @@ $querry = $mysqlClient->prepare("Select * from user where Username = \"$username
 $querry->execute();
 
 $similarUser = $querry->fetchAll();
- 
-if ($_POST["delete"] === "delete"){
+
+if ($_POST["delete"] === "delete") {
     $querry = $mysqlClient->prepare("DELETE From User WHERE username = \"$username\" ");
     $querry->execute();
 }
 
 if ($similarUser == null) {
-    echo"wut";
+    echo "wut";
 } else {
     $Wallet = $_POST['wallet'];
     $Role = $_POST['role'];
@@ -28,5 +28,4 @@ if ($similarUser == null) {
     $querry->execute();
 }
 
-header("Location: /adminPageUser.php");
-?>
+header("Location: /php_exam/adminPageUser.php");

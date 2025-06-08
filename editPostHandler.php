@@ -17,13 +17,13 @@ $article = $querry->fetchAll();
 $imageName = '';
 
 
-if ($_POST["delete"] === "delete"){
+if ($_POST["delete"] === "delete") {
     $querry = $mysqlClient->prepare("DELETE From article WHERE Id = \"$articleId\" ");
     $querry->execute();
 }
 
 if ($article == null) {
-    echo"wut";
+    echo "wut";
 } else {
     $name = $_POST['productName'];
     $description = $_POST['description'];
@@ -32,5 +32,4 @@ if ($article == null) {
     $querry->execute();
 }
 
-header("Location: /");
-?>
+header("Location: /php_exam/index.php");

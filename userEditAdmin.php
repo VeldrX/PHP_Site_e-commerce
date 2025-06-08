@@ -122,7 +122,7 @@ if (!$userToEdit) {
 <body>
     <?php include 'header.php'; ?>
     <main>
-        <form action="/userEditAdminHandler.php" method="post" enctype="multipart/form-data">
+        <form action="/php_exam/userEditAdminHandler.php" method="post" enctype="multipart/form-data">
             <h2>Modifier l'utilisateur</h2>
 
             <input type="hidden" name="username" value="<?= htmlspecialchars($userToEdit['Username']) ?>">

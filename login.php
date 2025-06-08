@@ -78,7 +78,7 @@
     <?php include 'header.php'; ?>
 
     <main>
-        <form action="/loginHandler.php" method="post">
+        <form action="/php_exam/loginHandler.php" method="post">
             <h2>Login</h2>
 
             <label for="username">Username</label>

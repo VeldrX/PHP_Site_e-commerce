@@ -118,7 +118,7 @@ if (!$postToEdit) {
 <body>
     <?php include 'header.php'; ?>
     <main>
-        <form action="/editPostHandler.php" method="post" enctype="multipart/form-data">
+        <form action="/php_exam/editPostHandler.php" method="post" enctype="multipart/form-data">
             <h2>Modifier l'article</h2>
 
             <input type="hidden" name="id" value="<?= htmlspecialchars($postToEdit['Id']) ?>">

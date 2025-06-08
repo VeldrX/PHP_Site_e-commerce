@@ -41,7 +41,7 @@ if (empty($similarUser)) {
     $_SESSION['username'] = $username;
     $_SESSION['role'] = 'user';
 
-    header("Location: /index.php");
+    header("Location: /php_exam/index.php");
     exit();
 } else {
     if ($similarUser[0]['Username'] === $username) {
@@ -52,6 +52,6 @@ if (empty($similarUser)) {
         $_SESSION['register_error'] = "Erreur inconnue.";
     }
 
-    header("Location: /register.php");
+    header("Location: /php_exam/register.php");
     exit();
 }

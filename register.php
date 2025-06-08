@@ -87,7 +87,7 @@
             <?php unset($_SESSION['register_error']); ?>
         <?php endif; ?>
 
-        <form action="/registerHandler.php" method="post">
+        <form action="/php_exam/registerHandler.php" method="post">
             <h2>Register</h2>
 
             <label for="username">Username</label>
