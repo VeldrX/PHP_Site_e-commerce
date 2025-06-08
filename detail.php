@@ -181,7 +181,7 @@ $quantity = $stock ? $stock['NbrInStock'] : 'Inconnu';
             <p class="login-prompt"><a href="login.php">Connectez-vous</a> pour ajouter cet article au panier.</p>
         <?php endif; ?>
         <?php
-        if (isset($_SESSION['user_id']) && ($_SESSION['user_id'] == $article['UserId'] || $user['Role'] === "admin")) {
+        if (isset($_SESSION['user_id']) && ($_SESSION['user_id'] == $article['UserId'] || $user['role'] === "admin")) {
             echo '
         <form method="post" action="editPost.php" style="display:inline-block;">
             <button type="submit" name="idOfThingSold" value="' . htmlspecialchars($article['Id']) . '" class="edit-button">

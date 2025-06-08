@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
@@ -77,6 +78,15 @@
     <?php include 'header.php'; ?>
 
     <main>
+        <?php session_start(); ?>
+
+        <?php if (isset($_SESSION['register_error'])): ?>
+            <div style="color: red; margin-bottom: 15px; text-align: center;">
+                <?= htmlspecialchars($_SESSION['register_error']) ?>
+            </div>
+            <?php unset($_SESSION['register_error']); ?>
+        <?php endif; ?>
+
         <form action="/registerHandler.php" method="post">
             <h2>Register</h2>
 
@@ -92,6 +102,7 @@
             <input type="submit" value="Register">
         </form>
     </main>
+
 
 </body>
 

@@ -13,6 +13,17 @@ if (isset($_SESSION['username'])) {
     $query = $pdo->prepare("SELECT * FROM user WHERE Username = :username");
     $query->bindValue(':username', $username, PDO::PARAM_STR);
     $query->execute();
+    $user = $query->fetch(PDO::FETCH_ASSOC); // ✅ D'abord on récupère l'utilisateur
+
+    $queryInvoices = $pdo->prepare("
+    SELECT * FROM invoice
+    WHERE IdUser = :userId
+    ORDER BY TransactionDate DESC");
+    $queryInvoices->bindValue(':userId', $user['Id'], PDO::PARAM_INT);
+    $queryInvoices->execute();
+    $invoices = $queryInvoices->fetchAll(PDO::FETCH_ASSOC);
+
+
 
     $queryArticles = $pdo->prepare("
         SELECT article.*, user.Username 
@@ -23,9 +34,8 @@ if (isset($_SESSION['username'])) {
     ");
     $queryArticles->bindValue(':username', $username, PDO::PARAM_STR);
     $queryArticles->execute();
-    $articles = $queryArticles->fetchAll(PDO::FETCH_ASSOC);
 
-    $user = $query->fetch(PDO::FETCH_ASSOC);
+    $articles = $queryArticles->fetchAll(PDO::FETCH_ASSOC);
 } else {
     echo "User not logged in.";
     exit;
@@ -271,6 +281,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <h2 class="section-title">Mes factures</h2>
+        <div class="articles">
+            <?php if (count($invoices) > 0): ?>
+                <?php foreach ($invoices as $invoice): ?>
+                    <div class="article-card">
+                        <h3>Facture #<?= htmlspecialchars($invoice['Id']) ?></h3>
+                        <p><strong>Montant :</strong> <?= number_format($invoice['Amount'], 2) ?> €</p>
+                        <p><strong>Date :</strong> <?= htmlspecialchars($invoice['TransactionDate']) ?></p>
+                        <p><strong>Adresse :</strong> <?= htmlspecialchars($invoice['BillingAddress']) ?>,
+                            <?= htmlspecialchars($invoice['BillingCity']) ?> <?= htmlspecialchars($invoice['ZipCode']) ?>
+                        </p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Tu n’as pas encore de facture.</p>
+            <?php endif; ?>
+        </div>
+
 
         <?php if ($pages > 1): ?>
             <div class="pagination">

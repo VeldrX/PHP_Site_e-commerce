@@ -54,9 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // Créer la facture
             $stmt = $pdo->prepare("
-                INSERT INTO invoice (IdUser, TransactionDate, Amount, BillingAddress, BillingCity, ZipCode)
-                VALUES (?, NOW(), ?, ?, ?, ?)
-            ");
+        INSERT INTO invoice (IdUser, TransactionDate, Amount, BillingAddress, BillingCity, ZipCode)
+        VALUES (?, NOW(), ?, ?, ?, ?)
+    ");
             $stmt->execute([$userId, $total, $address, $city, $zipcode]);
             $invoiceId = $pdo->lastInsertId();
 
@@ -68,6 +68,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $stmt = $pdo->prepare("UPDATE stock SET NbrInStock = NbrInStock - ? WHERE IdArticle = ?");
                 $stmt->execute([$item['Quantity'], $item['Id']]);
+            }
+
+            // Supprimer les articles dont le stock est tombé à 0
+            foreach ($items as $item) {
+                $stmt = $pdo->prepare("SELECT NbrInStock FROM stock WHERE IdArticle = ?");
+                $stmt->execute([$item['Id']]);
+                $stockResult = $stmt->fetch();
+
+                if ($stockResult && $stockResult['NbrInStock'] <= 0) {
+                    $stmt = $pdo->prepare("DELETE FROM stock WHERE IdArticle = ?");
+                    $stmt->execute([$item['Id']]);
+
+                    $stmt = $pdo->prepare("DELETE FROM article WHERE Id = ?");
+                    $stmt->execute([$item['Id']]);
+                }
             }
 
             // Supprimer le panier

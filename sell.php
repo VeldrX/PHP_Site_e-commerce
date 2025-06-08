@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="number" id="price" name="price" required>
 
             <label for="stock">Stock</label>
-            <input type="number" id="stock" name="stock" min=0 required>
+            <input type="number" id="stock" name="stock" min=1 required>
 
             <label for="image">Image</label>
             <input type="file" id="image" name="image" accept="image/*" required>
